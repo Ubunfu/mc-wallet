@@ -1,0 +1,23 @@
+
+version: 2.1
+orbs:
+  node: circleci/node@3.0.0
+
+jobs:
+  build:
+    docker:
+      - image: 'circleci/node:12.19.0'
+    steps:
+      - checkout
+      - run:
+          name: Install
+          command: npm install
+      - run:
+          name: Install Codecov
+          command: sudo npm install -g codecov
+      - run: 
+          name: Test
+          command: npm run test
+      - run:
+          name: Report Coverage
+          command: npm run report-coverage

@@ -1,6 +1,6 @@
 # mc-wallet
 [![Latest Release](https://img.shields.io/github/v/release/Ubunfu/mc-wallet)](https://github.com/Ubunfu/mc-wallet/releases)
-[![codecov](https://codecov.io/gh/Ubunfu/mc-wallet/branch/master/graph/badge.svg?token=XXX)](https://codecov.io/gh/Ubunfu/mc-wallet)
+[![codecov](https://codecov.io/gh/Ubunfu/mc-wallet/branch/master/graph/badge.svg?token=258GHULYE1)](https://codecov.io/gh/Ubunfu/mc-wallet)
 [![CircleCI](https://img.shields.io/circleci/build/github/Ubunfu/mc-wallet?logo=circleci)](https://app.circleci.com/pipelines/github/Ubunfu/mc-wallet)
 ![Contrubutors](https://img.shields.io/github/contributors/Ubunfu/mc-wallet?color=blue)
 ![Last Commit](https://img.shields.io/github/last-commit/Ubunfu/mc-wallet)

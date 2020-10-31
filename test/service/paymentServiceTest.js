@@ -17,6 +17,7 @@ const ERROR_UPDATE_WALLET_FAILED = 'error updating wallet';
 const ERROR_CREATE_WALLET_FAILED = 'error creating wallet';
 const ERROR_INSUFFICIENT_FUNDS = 'insufficient funds';
 const ERROR_WALLET_NOT_FOUND = 'wallet does not exist';
+const ERROR_GET_WALLET_FAILED = 'error retrieving wallet';
 
 describe('paymentService: When paying a player', function() {
     describe('And wallet exists', function() {
@@ -101,6 +102,20 @@ describe('paymentService: When paying a player', function() {
             });
         });
     });
+    describe('And get wallet fails', function() {
+        it('Should throw an error', async function() {
+            const getWalletMock = sinon.stub(dbService, "getWallet")
+                .throws('some error');
+            try {
+                await paymentService.pay("player", 10);
+                expect(true).to.be.false;
+            } catch (err) {
+                expect(err.message).to.be.equal(ERROR_GET_WALLET_FAILED);
+            } finally {
+                getWalletMock.restore();
+            }
+        });
+    });
 });
 
 describe('paymentService: When charging a player', function() {
@@ -162,6 +177,20 @@ describe('paymentService: When charging a player', function() {
                     expect(err.message).to.be.equal(ERROR_WALLET_NOT_FOUND);
                 }
                 getWalletMock.restore();
+        });
+    });
+    describe('And get wallet fails', function() {
+        it('Should throw an error', async function() {
+            const getWalletMock = sinon.stub(dbService, "getWallet")
+                .throws('some error');
+            try {
+                await paymentService.charge("player", 10);
+                expect(true).to.be.false;
+            } catch (err) {
+                expect(err.message).to.be.equal(ERROR_GET_WALLET_FAILED);
+            } finally {
+                getWalletMock.restore();
+            }
         });
     });
 });

@@ -1,7 +1,13 @@
 const dbService = require('../service/dbService.js');
 
 async function pay(player, amount) {
-    const walletResp = await dbService.getWallet(player);
+    
+    let walletResp;
+    try {
+        walletResp = await dbService.getWallet(player);
+    } catch (err) {
+        throw Error('error retrieving wallet');
+    }
     
     if(walletResp.WalletId == undefined) {
         try {
@@ -20,7 +26,12 @@ async function pay(player, amount) {
 
 async function charge(player, amount) {
 
-    const walletResp = await dbService.getWallet(player);
+    let walletResp;
+    try {
+        walletResp = await dbService.getWallet(player);
+    } catch (err) {
+        throw Error('error retrieving wallet');
+    }
     
     if(walletResp.WalletId == undefined) {
         throw Error('wallet does not exist');

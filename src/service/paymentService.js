@@ -20,6 +20,21 @@ async function pay(player, amount) {
 
 async function charge(player, amount) {
 
+    const walletResp = await dbService.getWallet(player);
+    
+    if(walletResp.WalletId == undefined) {
+        throw Error('wallet does not exist');
+    }
+
+    if (walletResp.Balance < amount) {
+        throw Error('insufficient funds');
+    }
+
+    try {
+        await dbService.updateWallet(player, -amount);
+    } catch (err) {
+        throw Error('error updating wallet');
+    }
 }
 
 exports.pay = pay;

@@ -13,14 +13,30 @@ async function getWallet(docClient, player) {
     }
 }
 
-async function updateWallet() {
+async function updateWallet(docClient, player, amount) {
+    const params = {
+        TableName: process.env.TABLE_WALLETS,
+        Key:{
+            "WalletID": player
+        },
+        UpdateExpression: "set Balance = Balance + :val",
+        ExpressionAttributeValues: {
+            ":val": amount
+        },
+        ReturnValues: "UPDATED_NEW"
+    };
+    try {
+        await docClient.update(params).promise();
+    } catch (err) {
+        throw new Error('db_error');
+    }
 
 }
 
 async function createWallet(docClient, player) {
     const params = {
         TableName: process.env.TABLE_WALLETS,
-        Item:{
+        Item: {
             "WalletId": player,
             "Balance": 0
         }

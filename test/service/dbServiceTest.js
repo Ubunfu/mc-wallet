@@ -59,3 +59,28 @@ describe('dbService: When getWallet is called', function() {
         });
     });
 });
+
+describe('dbService: When updateWallet is called', function() {
+    describe('And DynamoDB fails', function() {
+        it('Should throw an error', async function() {
+            const docClientMock = {
+                update: sinon.stub().returnsThis(),
+                promise: sinon.stub().rejects()
+            }
+            try {
+                await dbService.updateWallet(docClientMock, 'player', 10);
+                expect(true).to.be.false;
+            } catch (err) {
+                expect(err.message).to.be.equal('db_error');
+            }
+        });
+    });
+    it('Should call DynamoDB', async function() {
+        const docClientMock = {
+            update: sinon.stub().returnsThis(),
+            promise: sinon.stub().resolves({})
+        }
+        await dbService.updateWallet(docClientMock, 'player', 10);
+        expect(docClientMock.update.calledOnce).to.be.true;
+    });
+});

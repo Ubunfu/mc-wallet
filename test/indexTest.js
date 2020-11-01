@@ -5,17 +5,13 @@ const paymentService = require('../src/service/paymentService.js');
 
 const EVENT_PAYMENT = {
     requestContext: {
-        http: {
-            path: '/pay'
-        }
+        routeKey: 'POST /pay'
     },
     body: '{"player": "player1", "amount": 100}'
 }
 const EVENT_CHARGE = {
     requestContext: {
-        http: {
-            path: '/charge'
-        }
+        routeKey: 'POST /charge'
     },
     body: '{"player": "player1", "amount": 100}'
 }

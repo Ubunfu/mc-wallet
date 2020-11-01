@@ -10,7 +10,7 @@ exports.handler = async (event, context) => {
         'Content-Type': 'application/json',
     };
 
-    if (event.requestContext.http.path == '/pay') {
+    if (event.requestContext.routeKey == 'POST /pay') {
         const player = JSON.parse(event.body).player;
         const amount = JSON.parse(event.body).amount;
         try {
@@ -22,7 +22,7 @@ exports.handler = async (event, context) => {
                 errorDetail: err.message
             }
         }
-    } else if (event.requestContext.http.path == '/charge') {
+    } else if (event.requestContext.routeKey == 'POST /charge') {
         const player = JSON.parse(event.body).player;
         const amount = JSON.parse(event.body).amount;
         try {

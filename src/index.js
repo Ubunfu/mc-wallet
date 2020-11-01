@@ -14,7 +14,7 @@ exports.handler = async (event, context) => {
         const player = JSON.parse(event.body).player;
         const amount = JSON.parse(event.body).amount;
         try {
-            paymentService.pay(player, amount);
+            await paymentService.pay(player, amount);
         } catch (err) {
             statusCode = '500';
             body = {
@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
         const player = JSON.parse(event.body).player;
         const amount = JSON.parse(event.body).amount;
         try {
-            paymentService.charge(player, amount);
+            await paymentService.charge(player, amount);
         } catch (err) {
             if (err.message == 'wallet not found') {
                 statusCode = '404';

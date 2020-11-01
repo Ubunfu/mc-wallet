@@ -35,7 +35,9 @@ describe('paymentService: When paying a player', function() {
                 const updateWalletMock = sinon.stub(dbService, "updateWallet")
                     .returns({});
                 const paymentServiceResp = await paymentService.pay("player", 10);
-                expect(updateWalletMock.calledOnceWith("player", 10)).to.be.true;
+                expect(updateWalletMock.calledOnce).to.be.true;
+                expect(updateWalletMock.lastCall.args[1]).to.be.equal('player');
+                expect(updateWalletMock.lastCall.args[2]).to.be.equal(10);
                 updateWalletMock.restore();
             });
         });
@@ -77,10 +79,13 @@ describe('paymentService: When paying a player', function() {
                 createWalletMock.restore();
             });
             it('Should create the wallet', function() {
-                expect(createWalletMock.calledOnceWith("player")).to.be.true;
+                expect(createWalletMock.calledOnce).to.be.true;
+                expect(createWalletMock.lastCall.args[1]).to.be.equal('player');
             });
             it('Should update wallet correctly', function() {
-                expect(updateWalletMock.calledOnceWith("player", 10)).to.be.true;
+                expect(updateWalletMock.calledOnce).to.be.true;
+                expect(updateWalletMock.lastCall.args[1]).to.be.equal('player');
+                expect(updateWalletMock.lastCall.args[2]).to.be.equal(10);
             });
         });
         describe('And create wallet fails', function() {
@@ -134,7 +139,9 @@ describe('paymentService: When charging a player', function() {
                     const updateWalletMock = sinon.stub(dbService, "updateWallet")
                         .returns({});
                     await paymentService.charge("player", 10);
-                    expect(updateWalletMock.calledOnceWith("player", -10)).to.be.true;
+                    expect(updateWalletMock.calledOnce).to.be.true;
+                    expect(updateWalletMock.lastCall.args[1]).to.be.equal('player');
+                    expect(updateWalletMock.lastCall.args[2]).to.be.equal(-10);
                     updateWalletMock.restore();
                 });
             });

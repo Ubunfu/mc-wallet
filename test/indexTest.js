@@ -42,7 +42,7 @@ describe('index: When receives wallet payment request', function() {
         let handlerResp, paymentServiceMock = null;
         beforeEach(async function() {
             paymentServiceMock = sinon.stub(paymentService, "pay")
-                .throws('error!');
+                .throws('errorName', 'errorMessage!');
             handlerResp = await index.handler(EVENT_PAYMENT);
         });
         afterEach(function() {
@@ -54,7 +54,7 @@ describe('index: When receives wallet payment request', function() {
         it('Should return error code', function() {
             const respBody = JSON.parse(handlerResp.body);
             expect(respBody.error).to.be.equal('payment failed');
-            expect(respBody.errorDetail).to.be.equal('error!');
+            expect(respBody.errorDetail).to.be.equal('errorMessage!');
         });
     });
 });
@@ -81,7 +81,7 @@ describe('index: When receives wallet charge request', function() {
         let handlerResp, paymentServiceMock = null;
         beforeEach(async function() {
             paymentServiceMock = sinon.stub(paymentService, "charge")
-                .throws('wallet not found');
+                .throws('errorName', 'wallet not found');
             handlerResp = await index.handler(EVENT_CHARGE);
         });
         afterEach(function() {
@@ -100,7 +100,7 @@ describe('index: When receives wallet charge request', function() {
         let handlerResp, paymentServiceMock = null;
         beforeEach(async function() {
             paymentServiceMock = sinon.stub(paymentService, "charge")
-                .throws('unexpected error');
+                .throws('errorName', 'unexpected error');
             handlerResp = await index.handler(EVENT_CHARGE);
         });
         afterEach(function() {

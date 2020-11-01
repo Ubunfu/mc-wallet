@@ -19,7 +19,7 @@ exports.handler = async (event, context) => {
             statusCode = '500';
             body = {
                 error: 'payment failed',
-                errorDetail: err.name
+                errorDetail: err.message
             }
         }
     } else if (event.requestContext.http.path == '/charge') {
@@ -28,14 +28,14 @@ exports.handler = async (event, context) => {
         try {
             paymentService.charge(player, amount);
         } catch (err) {
-            if (err.name == 'wallet not found') {
+            if (err.message == 'wallet not found') {
                 statusCode = '404';
             } else {
                 statusCode = '500';
             }
             body = {
                 error: 'charge failed',
-                errorDetail: err.name
+                errorDetail: err.message
             }
         }
     } else {

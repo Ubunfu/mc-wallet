@@ -9,6 +9,9 @@ async function getWallet(docClient, player) {
     };
     try {
         const theWallet = await docClient.get(params).promise();
+        if (theWallet.Item == undefined) {
+            return {};
+        }
         return theWallet.Item;
     } catch (err) {
         log(err);

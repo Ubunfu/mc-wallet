@@ -58,6 +58,16 @@ describe('dbService: When getWallet is called', function() {
             expect(dbResp.WalletId).to.be.equal('player');
         });
     });
+    describe('And DynamoDB returns no results', function() {
+        it('Should return empty object', async function() {
+            const docClientMock = {
+                get: sinon.stub().returnsThis(),
+                promise: sinon.stub().resolves({})
+            };
+            const dbResp = await dbService.getWallet(docClientMock, "player");
+            expect(dbResp).to.be.deep.equal({});
+        });
+    });
 });
 
 describe('dbService: When updateWallet is called', function() {

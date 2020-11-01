@@ -20,7 +20,7 @@ async function updateWallet(docClient, player, amount) {
     const params = {
         TableName: process.env.TABLE_WALLETS,
         Key:{
-            "WalletID": player
+            "WalletId": player
         },
         UpdateExpression: "set Balance = Balance + :val",
         ExpressionAttributeValues: {

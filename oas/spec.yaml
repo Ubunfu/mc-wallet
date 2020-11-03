@@ -1,0 +1,94 @@
+openapi: 3.0.1
+info:
+  title: Mc-Wallet
+  version: 1.0.0
+externalDocs:
+  description: View on GitHub
+  url: https://github.com/Ubunfu/mc-wallet
+tags:
+- name: wallet
+  description: Wallet Operations
+paths:
+  /pay:
+    post:
+      tags:
+        - wallet
+      summary: Pay a player some currency
+      operationId: payPlayer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResp'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResp'
+  /charge:
+    post:
+      tags:
+        - wallet
+      summary: Charge a player some currency
+      operationId: chargePlayer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResp'
+        404:
+          description: Wallet Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResp'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResp'
+components:
+  schemas:
+    ErrorResp:
+      type: object
+      properties:
+        error:
+          type: string
+        errorDetail:
+          type: string
+    ChargeRequest:
+      type: object
+      properties:
+        player:
+          type: string
+        amount:
+          type: integer
+    PayRequest:
+      type: object
+      properties:
+        player:
+          type: string
+        amount:
+          type: integer

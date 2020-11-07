@@ -28,7 +28,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WalletRequest'
+                $ref: '#/components/schemas/WalletResp'
         404:
           description: Wallet Not Found
           content:
@@ -110,7 +110,7 @@ components:
           type: string
         errorDetail:
           type: string
-    WalletRequest:
+    WalletResp:
       type: object
       properties:
         WalletId:

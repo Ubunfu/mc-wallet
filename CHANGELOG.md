@@ -2,7 +2,7 @@
 This project attempts to conform to [SemVer](https://semver.org/) guidelines whenever possible.
 
 ## [v0.2.0]
-* [Implementing get wallet API]()
+* [Implementing get wallet API](https://github.com/Ubunfu/mc-wallet/pull/5)
 
 ## [v0.1.1]
 * [Adding API specification](https://github.com/Ubunfu/mc-wallet/pull/3)

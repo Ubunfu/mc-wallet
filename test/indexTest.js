@@ -2,6 +2,10 @@ const index = require('../src/index.js');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 const paymentService = require('../src/service/paymentService.js');
+const dbService = require('../src/service/dbService.js');
+
+const ERROR_GET_WALLET_FAILED = 'get wallet failed';
+const ERROR_DETAIL_WALLET_DOES_NOT_EXIST = 'wallet does not exist';
 
 const EVENT_PAYMENT = {
     requestContext: {
@@ -15,6 +19,53 @@ const EVENT_CHARGE = {
     },
     body: '{"player": "player1", "amount": 100}'
 }
+const EVENT_GET_WALLET = {
+    requestContext: {
+        routeKey: 'GET /wallet'
+    },
+    queryStringParameters: {
+        id: 'player1'
+    }
+}
+const A_WALLET = {
+    WalletId: 'player',
+    Balance: 100
+}
+
+describe('index: When receives a get wallet request', function() {
+    describe('And wallet not found', function() {
+        it('Returns HTTP 404', async function() {
+            const dbServiceMock = sinon.stub(dbService, "getWallet")
+                .returns({});
+            const walletResp = await index.handler(EVENT_GET_WALLET);
+            expect(walletResp.statusCode).to.be.equal('404');
+            expect(JSON.parse(walletResp.body).error).to.be.equal(ERROR_GET_WALLET_FAILED);
+            expect(JSON.parse(walletResp.body).errorDetail).to.be.equal(ERROR_DETAIL_WALLET_DOES_NOT_EXIST);
+            dbServiceMock.restore();
+        });
+    });
+    describe('And some other error happens', function() {
+        it('Returns HTTP 500', async function() {
+            const dbServiceMock = sinon.stub(dbService, "getWallet")
+                .throws('errorName', ERROR_GET_WALLET_FAILED);
+            const walletResp = await index.handler(EVENT_GET_WALLET);
+            expect(walletResp.statusCode).to.be.equal('500');
+            expect(JSON.parse(walletResp.body).error).to.be.equal(ERROR_GET_WALLET_FAILED);
+            expect(JSON.parse(walletResp.body).errorDetail).to.be.equal(ERROR_GET_WALLET_FAILED);
+            dbServiceMock.restore();
+        });
+    });
+    describe('And DB returns a wallet', function() {
+        it('Returns the wallet', async function() {
+            const dbServiceMock = sinon.stub(dbService, "getWallet")
+                .returns(A_WALLET);
+            const walletResp = await index.handler(EVENT_GET_WALLET);
+            expect(walletResp.statusCode).to.be.equal('200');
+            expect(JSON.parse(walletResp.body)).to.be.deep.equal(A_WALLET);
+            dbServiceMock.restore();
+        });
+    });
+});
 
 describe('index: When receives wallet payment request', function() {
     describe('And payment service succeeds', function() {

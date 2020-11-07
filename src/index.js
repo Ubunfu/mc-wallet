@@ -45,7 +45,7 @@ exports.handler = async (event, context) => {
     } else if (event.requestContext.routeKey == 'GET /wallet') {
         const walletId = event.queryStringParameters.id;
         try {
-            const walletResp = dbService.getWallet(docClient, walletId);
+            const walletResp = await dbService.getWallet(docClient, walletId);
             if (walletResp.WalletId == undefined) {
                 statusCode = '404';
                 body = {

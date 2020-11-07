@@ -9,6 +9,38 @@ tags:
 - name: wallet
   description: Wallet Operations
 paths:
+  /wallet:
+    get:
+      tags:
+        - wallet
+      summary: Retrieve a wallet
+      operationId: getWallet
+      parameters: 
+        - name: id
+          in: query
+          description: ID of a wallet
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletResp'
+        404:
+          description: Wallet Not Found
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResp'
+        500:
+          description: Server Error
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResp'
   /pay:
     post:
       tags:
@@ -77,6 +109,13 @@ components:
         error:
           type: string
         errorDetail:
+          type: string
+    WalletResp:
+      type: object
+      properties:
+        WalletId:
+          type: string
+        Balance:
           type: string
     ChargeRequest:
       type: object

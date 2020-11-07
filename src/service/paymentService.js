@@ -1,5 +1,6 @@
 const dbService = require('../service/dbService.js');
 const AWS = require('aws-sdk');
+const { log } = require('../util/logger.js');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 async function pay(player, amount) {
@@ -8,6 +9,7 @@ async function pay(player, amount) {
     try {
         walletResp = await dbService.getWallet(docClient, player);
     } catch (err) {
+        log('error retrieving wallet: ' + JSON.stringify(err));
         throw Error('error retrieving wallet');
     }
     
@@ -15,23 +17,26 @@ async function pay(player, amount) {
         try {
             await dbService.createWallet(docClient, player);
         } catch (err) {
+            log('error creating wallet: ' + JSON.stringify(err));
             throw Error('error creating wallet');
         }
     }
-
+    
     try {
         await dbService.updateWallet(docClient, player, amount);
     } catch (err) {
+        log('error updating wallet: ' + JSON.stringify(err));
         throw Error('error updating wallet');
     }
 }
 
 async function charge(player, amount) {
-
+    
     let walletResp;
     try {
         walletResp = await dbService.getWallet(docClient, player);
     } catch (err) {
+        log('error retrieving wallet: ' + JSON.stringify(err));
         throw Error('error retrieving wallet');
     }
     
@@ -46,6 +51,7 @@ async function charge(player, amount) {
     try {
         await dbService.updateWallet(docClient, player, -amount);
     } catch (err) {
+        log('error updating wallet: ' + JSON.stringify(err));
         throw Error('error updating wallet');
     }
 }

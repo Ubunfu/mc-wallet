@@ -4,11 +4,13 @@ async function getWallet(docClient, player) {
     const params = {
         TableName: process.env.TABLE_WALLETS,
         Key: {
-            'WalletId': player
+            "WalletId": player
         }
     };
     try {
+        log('Query params: ' + JSON.stringify(params));
         const theWallet = await docClient.get(params).promise();
+        log('DB Returned: ' + JSON.stringify(theWallet));
         if (theWallet.Item == undefined) {
             return {};
         }
@@ -32,6 +34,7 @@ async function updateWallet(docClient, player, amount) {
         ReturnValues: "UPDATED_NEW"
     };
     try {
+        log('Query params: ' + JSON.stringify(params));
         await docClient.update(params).promise();
     } catch (err) {
         log(err);
@@ -49,6 +52,7 @@ async function createWallet(docClient, player) {
         }
     };
     try {
+        log('Query params: ' + JSON.stringify(params));
         await docClient.put(params).promise();
     } catch (err) {
         log(err);

@@ -1,5 +1,9 @@
+require('dotenv').config();
 const { log } = require('./util/logger.js');
 const paymentService = require('./service/paymentService.js');
+const dbService = require('./service/dbService.js');
+const AWS = require('aws-sdk');
+const docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async (event, context) => {
     await log('Received event: ' + JSON.stringify(event, null, 2));
@@ -35,6 +39,26 @@ exports.handler = async (event, context) => {
             }
             body = {
                 error: 'charge failed',
+                errorDetail: err.message
+            }
+        }
+    } else if (event.requestContext.routeKey == 'GET /wallet') {
+        const walletId = event.queryStringParameters.id;
+        try {
+            const walletResp = await dbService.getWallet(docClient, walletId);
+            if (walletResp.WalletId == undefined) {
+                statusCode = '404';
+                body = {
+                    error: 'get wallet failed',
+                    errorDetail: 'wallet does not exist'
+                }
+            } else {
+                body = walletResp;
+            }
+        } catch (err) {
+            statusCode = '500';
+            body = {
+                error: 'get wallet failed',
                 errorDetail: err.message
             }
         }

@@ -1,0 +1,18 @@
+@startuml sequence_get-wallet
+
+title Sequence: Get Wallet
+
+collections McSteve
+collections McWallet
+database Wallets
+
+McSteve -> McWallet: GET /wallet (id)
+McWallet -> Wallets: get(id)
+alt id found
+    McWallet <-- Wallets: wallet(id,balance)
+    McSteve <-- McWallet: HTTP 200
+else id not found
+    McWallet <-- Wallets: (empty)
+    McSteve <-- McWallet: HTTP 404
+end
+@enduml

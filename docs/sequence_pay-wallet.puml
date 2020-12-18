@@ -1,0 +1,19 @@
+@startuml sequence_pay-wallet
+
+title Sequence: Pay Wallet
+
+collections McSteve
+collections McWallet
+database Wallets
+
+McSteve -> McWallet: POST /pay (id,amount)
+McWallet -> Wallets: get(id)
+alt id found
+    McWallet <-- Wallets: wallet(id,balance)
+else id not found
+    McWallet <-- Wallets: (empty)
+    McWallet -> Wallets: createWallet(id,0)
+end
+McWallet -> Wallets: saveWallet(id,(balance+amount))
+McSteve <-- McWallet: HTTP 200
+@enduml

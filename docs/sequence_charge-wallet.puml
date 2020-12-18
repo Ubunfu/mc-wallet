@@ -1,0 +1,24 @@
+@startuml sequence_charge-wallet
+
+title Sequence: Charge Wallet
+
+collections McSteve
+collections McWallet
+database Wallets
+
+McSteve -> McWallet: POST /charge (id,amount)
+McWallet -> Wallets: get(id)
+alt id found
+    McWallet <-- Wallets: wallet(id,balance)
+else id not found
+    McWallet <-- Wallets: (empty)
+    McSteve <-- McWallet: HTTP 404
+end
+McWallet -> McWallet: balance > amount?
+alt true (sufficient funds)
+    McWallet -> Wallets: saveWallet(id,(balance-amount))
+    McSteve <-- McWallet: HTTP 200
+else false (insufficient funds)
+    McSteve <-- McWallet: HTTP 500
+end
+@enduml

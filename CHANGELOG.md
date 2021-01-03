@@ -2,7 +2,7 @@
 This project attempts to conform to [SemVer](https://semver.org/) guidelines whenever possible.
 
 ## [v0.3.1]
-* [Removing sensitive data from logs](https://github.com/Ubunfu/mc-wallet/pull/)
+* [Removing sensitive data from logs](https://github.com/Ubunfu/mc-wallet/pull/9)
 
 ## [v0.3.0]
 * [Adding UML diagrams](https://github.com/Ubunfu/mc-wallet/pull/8)

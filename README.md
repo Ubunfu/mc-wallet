@@ -5,7 +5,7 @@
 ![Contrubutors](https://img.shields.io/github/contributors/Ubunfu/mc-wallet?color=blue)
 ![Last Commit](https://img.shields.io/github/last-commit/Ubunfu/mc-wallet)
 
-Processes requests for payments and charges to user wallets submitted by [mc-bounty-processor](https://github.com/Ubunfu/mc-bounty-processor) 
+Processes requests for payments and charges to user wallets.
 
 This service runs as an AWS lambda function.
 

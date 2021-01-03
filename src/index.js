@@ -6,7 +6,7 @@ const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async (event, context) => {
-    await log('Received event: ' + JSON.stringify(event, null, 2));
+    logEvent(event);
 
     let body;
     let statusCode = '200';
@@ -73,3 +73,13 @@ exports.handler = async (event, context) => {
         headers,
     };
 };
+
+async function logEvent(event) {
+    if (event.headers) {
+        event.headers.host = "XXX";
+    }
+    if (event.requestContext) {
+        event.requestContext.domainName = "XXX";
+    }
+    await log(JSON.stringify(event, null, 2));
+}

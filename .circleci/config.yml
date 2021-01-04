@@ -39,12 +39,10 @@ workflows:
     jobs:
       - build-and-test
   deploy:
-    triggers:
-      - schedule:
+    jobs:
+      - deploy:
           filters:
             branches:
               only:
                 - master
                 - feature/serverless-framework
-    jobs:
-      - deploy

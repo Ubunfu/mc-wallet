@@ -4,7 +4,7 @@ orbs:
   node: circleci/node@3.0.0
 
 jobs:
-  build:
+  build-and-test:
     docker:
       - image: 'circleci/node:12.19.0'
     steps:
@@ -21,3 +21,30 @@ jobs:
       - run:
           name: Report Coverage
           command: npm run report-coverage
+  deploy:
+    docker:
+      - image: 'circleci/node:12.19.0'
+    steps:
+      - checkout
+      - run:
+          name: Install Serverless CLI
+          command: sudo npm install -g serverless
+      - run:
+          name: Deploy
+          command: serverless deploy
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build-and-test
+  deploy:
+    triggers:
+      - schedule:
+          filters:
+            branches:
+              only:
+                - master
+                - feature/serverless-framework
+    jobs:
+      - deploy

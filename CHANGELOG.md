@@ -1,5 +1,9 @@
 # Changelog
 This project attempts to conform to [SemVer](https://semver.org/) guidelines whenever possible.
+
+## [v0.4.0]
+* [Adopting serverless framework](https://github.com/Ubunfu/mc-wallet/pull/)
+
 ## [v0.3.0]
 * [Adding UML diagrams](https://github.com/Ubunfu/mc-wallet/pull/8)
 * [Removing sensitive data from logs](https://github.com/Ubunfu/mc-wallet/pull/9)

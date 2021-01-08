@@ -1,7 +1,7 @@
 
 version: 2.1
 orbs:
-  node: circleci/node@3.0.0
+  serverless: circleci/serverless-framework@1.0.1
 
 jobs:
   build-and-test:
@@ -21,31 +21,50 @@ jobs:
       - run:
           name: Report Coverage
           command: npm run report-coverage
-  deploy:
-    docker:
-      - image: 'circleci/node:12.19.0'
+  deploy-dev:
+    executor: serverless/default
     steps:
       - checkout
       - run:
           name: Install Dependencies
           command: npm install
+      - serverless/setup:
+          app-name: mc-wallet
+          org-name: ryanallen
       - run:
-          name: Install Serverless CLI
-          command: sudo npm install -g serverless
+          command: serverless deploy --stage dev
+          name: deploy
+  deploy-prod:
+    executor: serverless/default
+    steps:
+      - checkout
       - run:
-          name: Deploy
-          command: serverless deploy
+          name: Install Dependencies
+          command: npm install
+      - serverless/setup:
+          app-name: mc-wallet
+          org-name: ryanallen
+      - run:
+          command: serverless deploy --stage prod
+          name: deploy
 
 workflows:
   version: 2
   build-deploy:
     jobs:
       - build-and-test
-      - deploy:
+      - deploy-dev:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only:
+                - develop
+                - feature/serverless-framework
+      - deploy-prod:
           requires:
             - build-and-test
           filters:
             branches:
               only:
                 - master
-                - feature/serverless-framework

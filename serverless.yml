@@ -12,10 +12,6 @@ provider:
   region: us-east-1
   role: arn:aws:iam::425071954352:role/service-role/mc-microservice-role
 
-package:
-  include:
-    - src/**
-
 environment:
   TABLE_WALLETS: wallets
   LOGGER_ENABLED: true

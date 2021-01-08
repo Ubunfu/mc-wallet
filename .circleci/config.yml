@@ -45,4 +45,4 @@ workflows:
             branches:
               only:
                 - master
-                - feature/serverless-framework:
+                - feature/serverless-framework

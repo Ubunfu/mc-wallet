@@ -41,8 +41,10 @@ workflows:
   deploy:
     jobs:
       - deploy:
+          requires:
+            - build-and-test
           filters:
             branches:
               only:
                 - master
-                - feature/serverless-framework
+                - feature/serverless-framework:

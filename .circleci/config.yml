@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install
+          name: Install Dependencies
           command: npm install
       - run:
           name: Install Codecov
@@ -26,6 +26,9 @@ jobs:
       - image: 'circleci/node:12.19.0'
     steps:
       - checkout
+      - run:
+          name: Install Dependencies
+          command: npm install
       - run:
           name: Install Serverless CLI
           command: sudo npm install -g serverless

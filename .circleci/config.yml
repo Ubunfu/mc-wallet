@@ -29,8 +29,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install
-      - aws-cli/setup:
-          aws-region: us-east-1
+      - aws-cli/setup
       - serverless/setup:
           app-name: mc-wallet
           org-name: ryanallen
@@ -44,8 +43,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install
-      - aws-cli/setup:
-          aws-region: us-east-1
+      - aws-cli/setup
       - serverless/setup:
           app-name: mc-wallet
           org-name: ryanallen

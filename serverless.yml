@@ -21,21 +21,15 @@ environment:
   LOGGER_ENABLED: true
 
 functions:
-  get-wallet:
+  mc-wallet:
     handler: src/index.handler
     events:
       - httpApi:
           path: /wallet
           method: get
-  pay-wallet:
-    handler: src/index.handler
-    events: 
       - httpApi:
           path: /pay
           method: post
-  charge-wallet:
-    handler: src/index.handler
-    events:
       - httpApi:
           path: /charge
           method: post

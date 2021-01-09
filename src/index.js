@@ -5,7 +5,7 @@ const dbService = require('./service/dbService.js');
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-module.exports.handler = async (event, context) => {
+exports.handler = async (event, context) => {
     logEvent(event);
 
     let body;

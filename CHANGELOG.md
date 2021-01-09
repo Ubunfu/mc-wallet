@@ -2,7 +2,7 @@
 This project attempts to conform to [SemVer](https://semver.org/) guidelines whenever possible.
 
 ## [v0.4.0]
-* [Adopting serverless framework](https://github.com/Ubunfu/mc-wallet/pull/)
+* [Adopting serverless framework](https://github.com/Ubunfu/mc-wallet/pull/12)
 
 ## [v0.3.0]
 * [Adding UML diagrams](https://github.com/Ubunfu/mc-wallet/pull/8)

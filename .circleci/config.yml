@@ -1,16 +1,17 @@
 
 version: 2.1
 orbs:
-  node: circleci/node@3.0.0
+  aws-cli: circleci/aws-cli@1.3.2
+  serverless: circleci/serverless-framework@1.0.1
 
 jobs:
-  build:
+  build-and-test:
     docker:
       - image: 'circleci/node:12.19.0'
     steps:
       - checkout
       - run:
-          name: Install
+          name: Install Dependencies
           command: npm install
       - run:
           name: Install Codecov
@@ -21,3 +22,51 @@ jobs:
       - run:
           name: Report Coverage
           command: npm run report-coverage
+  deploy-dev:
+    executor: serverless/default
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - aws-cli/setup
+      - serverless/setup:
+          app-name: mc-wallet
+          org-name: ryanallen
+      - run:
+          command: serverless deploy --stage dev
+          name: deploy
+  deploy-prod:
+    executor: serverless/default
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - aws-cli/setup
+      - serverless/setup:
+          app-name: mc-wallet
+          org-name: ryanallen
+      - run:
+          command: serverless deploy --stage prod
+          name: deploy
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build-and-test
+      - deploy-dev:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only:
+                - develop
+      - deploy-prod:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only:
+                - master

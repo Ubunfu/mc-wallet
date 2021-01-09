@@ -1,0 +1,29 @@
+app: mc-wallet
+org: ryanallen
+
+service: mc-wallet
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-1
+  role: arn:aws:iam::425071954352:role/service-role/mc-microservice-role
+  environment:
+    TABLE_WALLETS: wallets
+    LOGGER_ENABLED: true
+
+functions:
+  mc-wallet:
+    handler: src/index.handler
+    events:
+      - httpApi:
+          path: /wallet
+          method: get
+      - httpApi:
+          path: /pay
+          method: post
+      - httpApi:
+          path: /charge
+          method: post

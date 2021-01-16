@@ -2,6 +2,7 @@ const paymentService = require('../../src/service/paymentService.js');
 const sinon = require('sinon');
 const expect = require('chai').expect;
 const dbService = require('../../src/service/dbService.js');
+const paymentServiceErrorEnum = require('../../src/enums/paymentServiceErrorEnum.js');
 
 const A_WALLET = {
     WalletId: "player",
@@ -13,13 +14,27 @@ const A_WALLET_BALANCE_100 = {
     Balance: 100
 };
 
-const ERROR_UPDATE_WALLET_FAILED = 'error updating wallet';
-const ERROR_CREATE_WALLET_FAILED = 'error creating wallet';
-const ERROR_INSUFFICIENT_FUNDS = 'insufficient funds';
-const ERROR_WALLET_NOT_FOUND = 'wallet does not exist';
-const ERROR_GET_WALLET_FAILED = 'error retrieving wallet';
-
 describe('paymentService: When paying a player', function() {
+    describe('And amount is negative', function() {
+       it('Should return error', async function() {
+           try {
+               await paymentService.pay("player", -5);
+               expect(true).to.be.false;
+           } catch (err) {
+               expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_NON_POSITIVE_AMOUNT);
+           }
+       }); 
+    });
+    describe('And amount is zero', function() {
+        it('Should return error', async function() {
+            try {
+                await paymentService.pay("player", 0);
+                expect(true).to.be.false;
+            } catch (err) {
+                expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_NON_POSITIVE_AMOUNT);
+            }
+        }); 
+     });
     describe('And wallet exists', function() {
         let getWalletMock = null;
         beforeEach(function() {
@@ -49,7 +64,7 @@ describe('paymentService: When paying a player', function() {
                     await paymentService.pay("player", 10);
                     expect(true).to.be.false;
                 } catch (err) {
-                    expect(err.message).to.be.equal(ERROR_UPDATE_WALLET_FAILED);
+                    expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_UPDATE_WALLET_FAILED);
                 }
                 updateWalletMock.restore();
             });
@@ -102,7 +117,7 @@ describe('paymentService: When paying a player', function() {
                     await paymentService.pay("player", 10);
                     expect(true).to.be.false;
                 } catch (err) {
-                    expect(err.message).to.be.equal(ERROR_CREATE_WALLET_FAILED);
+                    expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_CREATE_WALLET_FAILED);
                 }
             });
         });
@@ -115,7 +130,7 @@ describe('paymentService: When paying a player', function() {
                 await paymentService.pay("player", 10);
                 expect(true).to.be.false;
             } catch (err) {
-                expect(err.message).to.be.equal(ERROR_GET_WALLET_FAILED);
+                expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_GET_WALLET_FAILED);
             } finally {
                 getWalletMock.restore();
             }
@@ -124,6 +139,26 @@ describe('paymentService: When paying a player', function() {
 });
 
 describe('paymentService: When charging a player', function() {
+    describe('And amount is negative', function() {
+        it('Should return error', async function() {
+            try {
+                await paymentService.charge("player", -5);
+                expect(true).to.be.false;
+            } catch (err) {
+                expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_NON_POSITIVE_AMOUNT);
+            }
+        }); 
+     });
+     describe('And amount is zero', function() {
+         it('Should return error', async function() {
+             try {
+                 await paymentService.charge("player", 0);
+                 expect(true).to.be.false;
+             } catch (err) {
+                 expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_NON_POSITIVE_AMOUNT);
+             }
+         }); 
+      });
     describe('And wallet exists', function() {
         describe('And player has sufficient funds', function() {
             let getWalletMock;
@@ -153,7 +188,7 @@ describe('paymentService: When charging a player', function() {
                         await paymentService.charge("player", 10);
                         expect(true).to.be.false;
                     } catch (err) {
-                        expect(err.message).to.be.equal(ERROR_UPDATE_WALLET_FAILED);
+                        expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_UPDATE_WALLET_FAILED);
                     }
                     updateWalletMock.restore();
                 });
@@ -167,7 +202,7 @@ describe('paymentService: When charging a player', function() {
                     await paymentService.charge("player", 10);
                     expect(true).to.be.false;
                 } catch (err) {
-                    expect(err.message).to.be.equal(ERROR_INSUFFICIENT_FUNDS);
+                    expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_INSUFFICIENT_FUNDS);
                 }
                 getWalletMock.restore();
             });
@@ -181,7 +216,7 @@ describe('paymentService: When charging a player', function() {
                     await paymentService.charge("player", 10);
                     expect(true).to.be.false;
                 } catch (err) {
-                    expect(err.message).to.be.equal(ERROR_WALLET_NOT_FOUND);
+                    expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_WALLET_NOT_FOUND);
                 }
                 getWalletMock.restore();
         });
@@ -194,7 +229,7 @@ describe('paymentService: When charging a player', function() {
                 await paymentService.charge("player", 10);
                 expect(true).to.be.false;
             } catch (err) {
-                expect(err.message).to.be.equal(ERROR_GET_WALLET_FAILED);
+                expect(err.message).to.be.equal(paymentServiceErrorEnum.ERROR_GET_WALLET_FAILED);
             } finally {
                 getWalletMock.restore();
             }

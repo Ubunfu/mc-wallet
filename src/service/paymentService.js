@@ -2,15 +2,20 @@ const dbService = require('../service/dbService.js');
 const AWS = require('aws-sdk');
 const { log } = require('../util/logger.js');
 const docClient = new AWS.DynamoDB.DocumentClient();
+const paymentServiceErrorEnum = require('../enums/paymentServiceErrorEnum.js');
 
 async function pay(player, amount) {
+
+    if (amount <= 0) {
+        throw Error(paymentServiceErrorEnum.ERROR_NON_POSITIVE_AMOUNT);
+    }
     
     let walletResp;
     try {
         walletResp = await dbService.getWallet(docClient, player);
     } catch (err) {
         log('error retrieving wallet: ' + JSON.stringify(err));
-        throw Error('error retrieving wallet');
+        throw Error(paymentServiceErrorEnum.ERROR_GET_WALLET_FAILED);
     }
     
     if(walletResp.WalletId == undefined) {
@@ -18,7 +23,7 @@ async function pay(player, amount) {
             await dbService.createWallet(docClient, player);
         } catch (err) {
             log('error creating wallet: ' + JSON.stringify(err));
-            throw Error('error creating wallet');
+            throw Error(paymentServiceErrorEnum.ERROR_CREATE_WALLET_FAILED);
         }
     }
     
@@ -26,33 +31,37 @@ async function pay(player, amount) {
         await dbService.updateWallet(docClient, player, amount);
     } catch (err) {
         log('error updating wallet: ' + JSON.stringify(err));
-        throw Error('error updating wallet');
+        throw Error(paymentServiceErrorEnum.ERROR_UPDATE_WALLET_FAILED);
     }
 }
 
 async function charge(player, amount) {
+    
+    if (amount <= 0) {
+        throw Error(paymentServiceErrorEnum.ERROR_NON_POSITIVE_AMOUNT);
+    }
     
     let walletResp;
     try {
         walletResp = await dbService.getWallet(docClient, player);
     } catch (err) {
         log('error retrieving wallet: ' + JSON.stringify(err));
-        throw Error('error retrieving wallet');
+        throw Error(paymentServiceErrorEnum.ERROR_GET_WALLET_FAILED);
     }
     
     if(walletResp.WalletId == undefined) {
-        throw Error('wallet does not exist');
+        throw Error(paymentServiceErrorEnum.ERROR_WALLET_NOT_FOUND);
     }
 
     if (walletResp.Balance < amount) {
-        throw Error('insufficient funds');
+        throw Error(paymentServiceErrorEnum.ERROR_INSUFFICIENT_FUNDS);
     }
 
     try {
         await dbService.updateWallet(docClient, player, -amount);
     } catch (err) {
         log('error updating wallet: ' + JSON.stringify(err));
-        throw Error('error updating wallet');
+        throw Error(paymentServiceErrorEnum.ERROR_UPDATE_WALLET_FAILED);
     }
 }
 

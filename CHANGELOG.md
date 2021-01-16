@@ -1,6 +1,9 @@
 # Changelog
 This project attempts to conform to [SemVer](https://semver.org/) guidelines whenever possible.
 
+## [v0.4.1]
+* [Preventing stealing via negative payments](https://github.com/Ubunfu/mc-wallet/pull/)
+
 ## [v0.4.0]
 * [Adopting serverless framework](https://github.com/Ubunfu/mc-wallet/pull/12)
 

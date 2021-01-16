@@ -4,6 +4,8 @@ const paymentService = require('./service/paymentService.js');
 const dbService = require('./service/dbService.js');
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
+const errorMessageEnum = require('./enums/errorMessageEnum.js');
+const paymentServiceErrorEnum = require('./enums/paymentServiceErrorEnum.js');
 
 exports.handler = async (event, context) => {
     logEvent(event);
@@ -20,9 +22,13 @@ exports.handler = async (event, context) => {
         try {
             await paymentService.pay(player, amount);
         } catch (err) {
-            statusCode = '500';
+            if (err.message == paymentServiceErrorEnum.ERROR_NON_POSITIVE_AMOUNT) {
+                statusCode = '400';
+            } else {
+                statusCode = '500';
+            }
             body = {
-                error: 'payment failed',
+                error: errorMessageEnum.ERROR_PAY_WALLET_FAILED,
                 errorDetail: err.message
             }
         }
@@ -32,13 +38,15 @@ exports.handler = async (event, context) => {
         try {
             await paymentService.charge(player, amount);
         } catch (err) {
-            if (err.message == 'wallet not found') {
+            if (err.message == paymentServiceErrorEnum.ERROR_WALLET_NOT_FOUND) {
                 statusCode = '404';
+            } else if (err.message == paymentServiceErrorEnum.ERROR_NON_POSITIVE_AMOUNT) {
+                statusCode = '400';
             } else {
                 statusCode = '500';
             }
             body = {
-                error: 'charge failed',
+                error: errorMessageEnum.ERROR_CHARGE_WALLET_FAILED,
                 errorDetail: err.message
             }
         }
@@ -49,8 +57,8 @@ exports.handler = async (event, context) => {
             if (walletResp.WalletId == undefined) {
                 statusCode = '404';
                 body = {
-                    error: 'get wallet failed',
-                    errorDetail: 'wallet does not exist'
+                    error: errorMessageEnum.ERROR_GET_WALLET_FAILED,
+                    errorDetail: paymentServiceErrorEnum.ERROR_WALLET_NOT_FOUND
                 }
             } else {
                 body = walletResp;
@@ -58,7 +66,7 @@ exports.handler = async (event, context) => {
         } catch (err) {
             statusCode = '500';
             body = {
-                error: 'get wallet failed',
+                error: errorMessageEnum.ERROR_GET_WALLET_FAILED,
                 errorDetail: err.message
             }
         }

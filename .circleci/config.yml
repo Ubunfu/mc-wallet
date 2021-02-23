@@ -57,13 +57,19 @@ workflows:
     jobs:
       - build-and-test
       - deploy-dev:
+          context: 
+            - craftonomy-dev
           requires:
             - build-and-test
           filters:
             branches:
               only:
                 - develop
+                - /feature\/.*/
+                - /bugfix\/.*/
       - deploy-prod:
+          context: 
+            - craftonomy-prod
           requires:
             - build-and-test
           filters:

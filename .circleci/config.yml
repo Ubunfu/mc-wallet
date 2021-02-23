@@ -63,6 +63,8 @@ workflows:
             branches:
               only:
                 - develop
+                - /feature\/.*/
+                - /bugfix\/.*/
       - deploy-prod:
           requires:
             - build-and-test

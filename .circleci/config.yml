@@ -24,7 +24,6 @@ jobs:
           name: Report Coverage
           command: npm run report-coverage
       - discord/status:
-          webhook: ${CICD_WEBHOOK_URL}
           fail_only: true
   deploy-dev:
     executor: serverless/default
@@ -40,8 +39,7 @@ jobs:
       - run:
           command: serverless deploy --stage dev
           name: deploy
-      - discord/status:
-          webhook: ${CICD_WEBHOOK_URL}
+      - discord/status
   deploy-prod:
     executor: serverless/default
     steps:
@@ -56,8 +54,7 @@ jobs:
       - run:
           command: serverless deploy --stage prod
           name: deploy
-      - discord/status:
-          webhook: ${CICD_WEBHOOK_URL}
+      - discord/status
 workflows:
   version: 2
   build-deploy:

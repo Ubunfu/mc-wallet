@@ -1,6 +1,10 @@
 # Changelog
 This project attempts to conform to [SemVer](https://semver.org/) guidelines whenever possible.
 
+## [v1.0.0]
+* [Adding DB to serverless stack](https://github.com/Ubunfu/mc-wallet/pull/16)
+* [Adding Circle Orb to post build notifications to Discord](https://github.com/Ubunfu/mc-wallet/pull/17)
+
 ## [v0.4.1]
 * [Preventing stealing via negative payments](https://github.com/Ubunfu/mc-wallet/pull/14)
 

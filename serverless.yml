@@ -11,8 +11,10 @@ provider:
   region: us-east-1
   role: arn:aws:iam::425071954352:role/service-role/mc-microservice-role
   environment:
-    TABLE_WALLETS: wallets
     LOGGER_ENABLED: true
+    TABLE_WALLETS:
+      Ref:
+        - WalletDatabase
 
 functions:
   mc-wallet:
@@ -27,3 +29,16 @@ functions:
       - httpApi:
           path: /charge
           method: post
+
+resources:
+  Resources:
+    WalletDatabase:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "WalletId"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "WalletId"
+            KeyType: "HASH"
+        BillingMode: "PAY_PER_REQUEST"
